@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <!-- create a form to send message-->
+
+        <form onsubmit="return sendMessage();">
+            <input id="message" placeholder = "Enter message" autocomplete = "off">
+
+            <input type="submit">
+        
+        
+        
+        </form>
+
+        <!--create a list-->
+        <ul id="messages"></ul>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
+            import { getDatabase, get, ref,set , onValue } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js';
+           
+            const firebaseConfig = {
+              apiKey: "AIzaSyBfKn0P6fHwL7nDaPbd9HI9zrNr4MKmMyo",
+              authDomain: "web-based-chat-in-firebase.firebaseapp.com",
+              projectId: "web-based-chat-in-firebase",
+              storageBucket: "web-based-chat-in-firebase.appspot.com",
+              messagingSenderId: "381797945831",
+              appId: "1:381797945831:web:50f671c0bd686170b7ad42"
+            };
+          
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase(app);
+            function sendMessage(){
+                //get message
+                var message = document.getElementById("message").value;
+
+                //save message
+                firebase.database().ref("messages").push().set({
+                    "sender" : myName,
+                    "message" : message
+                });
+            }
+
+            //prevent form from submitting
+            return false;
+
+
+            //listen for incoming messages
+            firebase.database().ref("messages").on("child_added",function (snapshot){
+                var html = "";
+                html += "<li>";
+                    html += snapshot.val().sender + ": " + snapshot.val().message;
+                html +="</li>"
+            });
+            
+            document.getElementById("messages").innerHTML += html;
+          </script>
+    </body>
+</html>
